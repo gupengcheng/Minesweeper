@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="top_item_width">36dp</dimen>
+    <dimen name="top_item_height">36dp</dimen>
+    <dimen name="top_time_width">20dp</dimen>
+    <dimen name="top_time_height">36dp</dimen>
+</resources>

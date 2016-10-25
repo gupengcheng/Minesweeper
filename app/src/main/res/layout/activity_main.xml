@@ -1,0 +1,118 @@
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_background"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/iv_play"
+            android:layout_width="@dimen/top_item_width"
+            android:layout_height="@dimen/top_item_height"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/iv_smile"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_bomb"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/top_time_height"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8dp"
+            android:background="@android:color/black"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/iv_bomb_hundred"
+                android:layout_width="@dimen/top_time_width"
+                android:layout_height="@dimen/top_time_height"
+                android:layout_alignParentLeft="true"
+                android:src="@mipmap/iv_c0"/>
+
+            <ImageView
+                android:id="@+id/iv_bomb_ten"
+                android:layout_width="@dimen/top_time_width"
+                android:layout_height="@dimen/top_time_height"
+                android:layout_toRightOf="@id/iv_bomb_hundred"
+                android:src="@mipmap/iv_c0"/>
+
+            <ImageView
+                android:id="@+id/iv_bomb_bit"
+                android:layout_width="@dimen/top_time_width"
+                android:layout_height="@dimen/top_time_height"
+                android:layout_toRightOf="@id/iv_bomb_ten"
+                android:src="@mipmap/iv_c0"/>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_setting"
+            android:layout_width="@dimen/top_item_width"
+            android:layout_height="@dimen/top_item_height"
+            android:layout_marginLeft="16dp"
+            android:layout_toRightOf="@id/rl_bomb"
+            android:src="@mipmap/iv_setting"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_time"
+            android:layout_width="89dp"
+            android:layout_height="@dimen/top_time_height"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="8dp"
+            android:background="@android:color/black"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/iv_time_bit"
+                android:layout_width="@dimen/top_time_width"
+                android:layout_height="@dimen/top_time_height"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/iv_c0"/>
+
+            <ImageView
+                android:id="@+id/iv_time_ten"
+                android:layout_width="@dimen/top_time_width"
+                android:layout_height="@dimen/top_time_height"
+                android:layout_toLeftOf="@id/iv_time_bit"
+                android:src="@mipmap/iv_c0"/>
+
+            <ImageView
+                android:id="@+id/iv_time_czz"
+                android:layout_width="9dp"
+                android:layout_height="@dimen/top_time_height"
+                android:layout_toLeftOf="@id/iv_time_ten"
+                android:src="@mipmap/iv_czz"/>
+
+            <ImageView
+                android:id="@+id/iv_time_hundred"
+                android:layout_width="@dimen/top_time_width"
+                android:layout_height="@dimen/top_time_height"
+                android:layout_toLeftOf="@id/iv_time_czz"
+                android:src="@mipmap/iv_c0"/>
+
+            <ImageView
+                android:id="@+id/iv_time_kilobit"
+                android:layout_width="@dimen/top_time_width"
+                android:layout_height="@dimen/top_time_height"
+                android:layout_toLeftOf="@id/iv_time_hundred"
+                android:src="@mipmap/iv_c0"/>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_flag_mine"
+            android:layout_width="@dimen/top_item_width"
+            android:layout_height="@dimen/top_item_height"
+            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@id/rl_time"
+            android:src="@mipmap/iv_switch_flag"/>
+    </RelativeLayout>
+
+    <GridLayout
+        android:id="@+id/gl_minesweeper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"/>
+
+</merge>
