@@ -2,13 +2,30 @@
 package com.gpc.minesweeper.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.utils.BarUtils;
+import com.blankj.utilcode.utils.LogUtils;
+import com.blankj.utilcode.utils.ScreenUtils;
+import com.blankj.utilcode.utils.SizeUtils;
 import com.gpc.minesweeper.R;
+import com.gpc.minesweeper.utils.Constant;
+import com.gpc.minesweeper.utils.DrawableManager;
+import com.gpc.minesweeper.utils.GameSoundManager;
+import com.gpc.minesweeper.utils.PreferenceUtils;
+import com.gpc.minesweeper.utils.StatusBarUtils;
+import com.gpc.minesweeper.widget.CellImageView;
+
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -25,10 +42,8 @@ public class MainActivity extends Activity implements View.OnClickListener,
 
     @BindView(R.id.iv_play)
     ImageView mIvPlay;
-    @BindView(R.id.iv_setting)
-    ImageView mIvSetting;
-    @BindView(R.id.iv_flag_mine)
-    ImageView mIvFlagMine;
+    @BindView(R.id.iv_flag_bomb)
+    ImageView mIvFlagBomb;
 
     @BindView(R.id.iv_bomb_hundred)
     ImageView mIvBombHundred;
@@ -46,15 +61,71 @@ public class MainActivity extends Activity implements View.OnClickListener,
     @BindView(R.id.iv_time_bit)
     ImageView mIvTimeBit;
 
+    private Context mContext;
+
+    private Handler mPlayedTimeHandler;
+    private int mPlayedTime = 0;
+
+    private int mSoundIdClick;
+    private int mSoundIdMark;
+    private int mSoundIdVictory;
+    private int mSoundIdFailed;
+
+    private boolean mMarked = false;
+    private boolean mStarted = false;
+    private boolean mFullScreen;
+    private int mGameState;
+    private int mCellRealWidth;
+    private int mCellRealHeight;
+
+    // 打开的地雷方块总数
+    private int mOpenCellNumbers = 0;
+    // 参与计算的地雷总数
+    private int mExistBombNumber;
+    // 实际不变的地雷总数
+    private int mRealBombNumber;
+    private int mTotalRows;
+    private int mTotalColumns;
+    private int mTotalCells;
+    private int mScreenOrientation;
+    private int mCellSize;
+    private int mDifficulty;
+
+    private boolean[][] mBombArray;
+    private boolean[][] mMarkArray;
+    private boolean[][] mOpenArray;
+    private int[][] mBombNumberArray;
+    private CellImageView[][] mCellArray;
+
+    private Timer mTimer;
+    private TimerTask mTimerTask;
+
+    private static final int TOP_VIEW_HEIGHT = 48;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
+        initPlayedTimeHandler();
+        initGame();
     }
 
     @Override
     public void onClick(View v) {
+        if (mGameState != Constant.STATE_PLAYING) {
+            return;
+        }
 
+        CellImageView cellImageView = (CellImageView) v;
+
+        startPlayedTimer();
+
+        if (mMarked) {
+            markStateClick(cellImageView);
+        } else {
+            normalStateClick(cellImageView);
+        }
     }
 
     @Override
@@ -69,10 +140,437 @@ public class MainActivity extends Activity implements View.OnClickListener,
 
     @OnClick(R.id.iv_play)
     void playGame() {
+        if (mStarted) {
+            newGame();
+        }
+    }
+
+    @OnClick(R.id.iv_setting)
+    void setting() {
 
     }
 
-    private void initDrawables() {
-
+    @OnClick(R.id.iv_flag_bomb)
+    void flagBomb() {
+        mIvFlagBomb.setImageResource(
+                mMarked ? R.mipmap.iv_switch_flag : R.mipmap.iv_switch_bomb);
+        mMarked = !mMarked;
     }
+
+    private void markStateClick(CellImageView cellImageView) {
+        int cellRow = cellImageView.getCellRow();
+        int cellColumn = cellImageView.getCellColumn();
+        if (mOpenArray[cellRow][cellColumn]) {
+            return;
+        }
+        if (mMarkArray[cellRow][cellColumn]) {
+            mMarkArray[cellRow][cellColumn] = false;
+            mExistBombNumber++;
+        } else {
+            //// 如果已经没有可以标记的炸弹数量，则不能再标记
+            if (mExistBombNumber <= 0) {
+                return;
+            }
+            mMarkArray[cellRow][cellColumn] = true;
+            mExistBombNumber--;
+        }
+        GameSoundManager.getInstance().playingSound(mSoundIdMark);
+        showBombNumberView();
+        cellImageView.setImageDrawable(
+                mMarkArray[cellRow][cellColumn] ? R.mipmap.iv_flag : R.mipmap.iv_button);
+    }
+
+    private void normalStateClick(CellImageView cellImageView) {
+        int cellRow = cellImageView.getCellRow();
+        int cellColumn = cellImageView.getCellColumn();
+        if (mOpenArray[cellRow][cellColumn] || mMarkArray[cellRow][cellColumn]) {
+            return;
+        }
+        if (!mBombArray[cellRow][cellColumn]) {
+            GameSoundManager.getInstance().playingSound(mSoundIdClick);
+            openNext(cellRow, cellColumn);
+        } else {
+            mOpenArray[cellRow][cellColumn] = true;
+            GameSoundManager.getInstance().playingSound(mSoundIdFailed);
+            int currentPlayedTimes = PreferenceUtils.getPlayGameTimes(mContext);
+            PreferenceUtils.setPlayGameTimes(mContext, ++currentPlayedTimes);
+            isOver(false, cellRow, cellColumn);
+            clearRestoreGameData();
+        }
+    }
+
+    private void openNext(int cellRow, int cellColumn) {
+        mOpenArray[cellRow][cellColumn] = true;
+        mCellArray[cellRow][cellColumn].setImageDrawable(DrawableManager.getInstance()
+                .getCellNumberResourceId(mBombNumberArray[cellRow][cellColumn]));
+        mOpenCellNumbers++;
+        // 如果炸弹数量为0，则可以打开周围的位置，以作为边界结束
+        if (mBombNumberArray[cellRow][cellColumn] == 0) {
+            openAround(cellRow, cellColumn);
+        }
+        if (mOpenCellNumbers + mRealBombNumber == mTotalCells) {
+            isOver(true, cellRow, cellColumn);
+            clearRestoreGameData();
+        }
+    }
+
+    // 打开周围的位置，以边界作为结束
+    private void openAround(int row, int column) {
+        if (column - 1 >= 0)
+            if (!mBombArray[row][column - 1] && !mOpenArray[row][column - 1]
+                    && !mMarkArray[row][column - 1])
+                openNext(row, column - 1);
+        if (column + 1 < mOpenArray[row].length)
+            if (!mBombArray[row][column + 1] && !mOpenArray[row][column + 1]
+                    && !mMarkArray[row][column + 1])
+                openNext(row, column + 1);
+        if (row - 1 >= 0) {
+            if (!mBombArray[row - 1][column] && !mOpenArray[row - 1][column]
+                    && !mMarkArray[row - 1][column])
+                openNext(row - 1, column);
+            if (column - 1 >= 0)
+                if (!mBombArray[row - 1][column - 1] && !mOpenArray[row - 1][column - 1]
+                        && !mMarkArray[row - 1][column - 1])
+                    openNext(row - 1, column - 1);
+            if (column + 1 < mOpenArray[row].length)
+                if (!mBombArray[row - 1][column + 1] && !mOpenArray[row - 1][column + 1]
+                        && !mMarkArray[row - 1][column + 1])
+                    openNext(row - 1, column + 1);
+        }
+        if (row + 1 < mOpenArray.length) {
+            if (!mBombArray[row + 1][column] && !mOpenArray[row + 1][column]
+                    && !mMarkArray[row + 1][column])
+                openNext(row + 1, column);
+            if (column - 1 >= 0)
+                if (!mBombArray[row + 1][column - 1] && !mOpenArray[row + 1][column - 1]
+                        && !mMarkArray[row + 1][column - 1])
+                    openNext(row + 1, column - 1);
+            if (column + 1 < mOpenArray[row].length)
+                if (!mBombArray[row + 1][column + 1] && !mOpenArray[row + 1][column + 1]
+                        && !mMarkArray[row + 1][column + 1])
+                    openNext(row + 1, column + 1);
+        }
+    }
+
+    private void initPlayedTimeHandler() {
+        mPlayedTimeHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                setPlayedTime();
+            }
+        };
+    }
+
+    private void setPlayedTime() {
+        int minute = mPlayedTime / 60;
+        int second = mPlayedTime % 60;
+
+        int tenMinute = minute / 10;
+        int bitMinute = minute % 10;
+
+        int tenSecond = second / 10;
+        int bitSecond = second % 10;
+
+        mIvTimeKilo.setImageDrawable(DrawableManager.getInstance()
+                .getDrawable(DrawableManager.getInstance().getTimeNumberResourceId(tenMinute)));
+        mIvTimeHundred.setImageDrawable(DrawableManager.getInstance()
+                .getDrawable(DrawableManager.getInstance().getTimeNumberResourceId(bitMinute)));
+        mIvTimeTen.setImageDrawable(DrawableManager.getInstance()
+                .getDrawable(DrawableManager.getInstance().getTimeNumberResourceId(tenSecond)));
+        mIvTimeBit.setImageDrawable(DrawableManager.getInstance()
+                .getDrawable(DrawableManager.getInstance().getTimeNumberResourceId(bitSecond)));
+    }
+
+    private void initGame() {
+        initGameSound();
+        initGameState();
+    }
+
+    private void initGameSound() {
+        mSoundIdClick = GameSoundManager.getInstance().getSoundId(R.raw.click);
+        mSoundIdMark = GameSoundManager.getInstance().getSoundId(R.raw.mark);
+        mSoundIdFailed = GameSoundManager.getInstance().getSoundId(R.raw.failed);
+        mSoundIdVictory = GameSoundManager.getInstance().getSoundId(R.raw.vctory);
+    }
+
+    private void initGameState() {
+        if (PreferenceUtils.isRestoreGame(mContext)) {
+            restoreGame();
+        } else {
+            newGame();
+        }
+    }
+
+    private void restoreGame() {
+        getRestoreGameData();
+        // 如果数据不合法，重新新建游戏
+        if (!restoreDataLegal()) {
+            newGame();
+            return;
+        }
+        initCommonGameState();
+        setStatusBar();
+        initMarkedImageView();
+        restoreGlMinesweeper();
+    }
+
+    private void newGame() {
+        resetNewGameState();
+        setStatusBar();
+        initMarkedImageView();
+        initGridMinesweeper();
+        initBombNumber();
+        closePlayedTimer();
+        resetPlayedTime();
+    }
+
+    private void getRestoreGameData() {
+        mPlayedTime = PreferenceUtils.getPlayedTime(mContext);
+        mExistBombNumber = PreferenceUtils.getExistBombNumber(mContext);
+        mRealBombNumber = PreferenceUtils.getRealBombNumber(mContext);
+        mTotalRows = PreferenceUtils.getTotalRows(mContext);
+        mTotalColumns = PreferenceUtils.getTotalColumns(mContext);
+        mTotalCells = mTotalRows * mTotalColumns;
+        mOpenCellNumbers = PreferenceUtils.getOpenNumbers(mContext);
+        mBombArray = PreferenceUtils.getBombsArray(mContext);
+        mMarkArray = PreferenceUtils.getMarksArray(mContext);
+        mOpenArray = PreferenceUtils.getOpensArray(mContext);
+        mBombNumberArray = PreferenceUtils.getBombNumberArray(mContext);
+        mScreenOrientation = PreferenceUtils.getScreenOrientation(mContext);
+        mMarked = PreferenceUtils.getMarkedState(mContext);
+    }
+
+    private void clearRestoreGameData() {
+        if (!PreferenceUtils.isRestoreGame(this)) {
+            return;
+        }
+        PreferenceUtils.setPlayedTime(this, 0);
+        PreferenceUtils.setExistBombNumber(this, 0);
+        PreferenceUtils.setRealBombNumber(this, 0);
+        PreferenceUtils.setTotalRows(this, 0);
+        PreferenceUtils.setTotalColumns(this, 0);
+        PreferenceUtils.setOpenNumbers(this, 0);
+        PreferenceUtils.setBombsArray(this, null);
+        PreferenceUtils.setMarksArray(this, null);
+        PreferenceUtils.setOpensArray(this, null);
+        PreferenceUtils.setBombNumberArray(this, null);
+        PreferenceUtils.setScreenOrientation(this, 1);
+        PreferenceUtils.setMarkedState(this, mMarked);
+        PreferenceUtils.setRestoreGame(this, false);
+    }
+
+    private void initCommonGameState() {
+        mStarted = false;
+        mGameState = Constant.STATE_PLAYING;
+        mIvPlay.setImageResource(R.mipmap.iv_smile);
+
+        mFullScreen = PreferenceUtils.getFullscreenMode(mContext);
+        mCellSize = PreferenceUtils.getCellSize(mContext);
+        mDifficulty = PreferenceUtils.getDifficultType(mContext);
+
+        mCellRealWidth = mCellSize;
+        mCellRealHeight = mCellSize;
+    }
+
+    private void resetNewGameState() {
+        mOpenCellNumbers = 0;
+        initCommonGameState();
+    }
+
+    private boolean restoreDataLegal() {
+        if (mBombArray == null || mMarkArray == null || mOpenArray == null
+                || mBombNumberArray == null) {
+            return false;
+        }
+        return true;
+    }
+
+    private void restoreGlMinesweeper() {
+        mGlMinesweeper.removeAllViews();
+
+        int glWidth = getGlWidth();
+        int glHeight = getGlHeight();
+
+        mCellRealWidth = glWidth / mTotalColumns;
+        mCellRealHeight = glHeight / mTotalRows;
+        mCellArray = new CellImageView[mTotalRows][mTotalColumns];
+
+        initGlView();
+    }
+
+    private void initGridMinesweeper() {
+        mGlMinesweeper.removeAllViews();
+
+        int glWidth = getGlWidth();
+        int glHeight = getGlHeight();
+        int glRows = glHeight / mCellRealHeight;
+        int glColumns = glWidth / mCellRealWidth;
+
+        LogUtils.e("store mCellRealWidth = " + mCellRealWidth + " mCellRealHeight = "
+                + mCellRealHeight);
+        // 防止不能整除的情况下，出现多余的空间没有分配，尽量减少这种情况发生
+        mCellRealWidth = glWidth / glColumns;
+        mCellRealHeight = glHeight / glRows;
+        LogUtils.e("final mCellRealWidth = " + mCellRealWidth + " mCellRealHeight = "
+                + mCellRealHeight);
+
+        initArrays(glRows, glColumns);
+        initGlView();
+    }
+
+    private void initMarkedImageView() {
+        mIvFlagBomb.setImageResource(
+                mMarked ? R.mipmap.iv_switch_flag : R.mipmap.iv_switch_bomb);
+    }
+
+    private int getGlWidth() {
+        int screenWidth = ScreenUtils.getScreenWidth(mContext);
+        return screenWidth;
+    }
+
+    private int getGlHeight() {
+        int topViewHeight = SizeUtils.dp2px(mContext, TOP_VIEW_HEIGHT);
+        int screenHeight = ScreenUtils.getScreenHeight(mContext);
+        if (mFullScreen) {
+            return screenHeight - topViewHeight;
+        }
+        int statusBarHeight = BarUtils.getStatusBarHeight(mContext);
+        return screenHeight - statusBarHeight - topViewHeight;
+    }
+
+    private void initArrays(int totalRows, int totalColumns) {
+        mTotalRows = totalRows;
+        mTotalColumns = totalColumns;
+        mTotalColumns = totalRows * totalColumns;
+        mBombArray = new boolean[totalRows][totalColumns];
+        mMarkArray = new boolean[totalRows][totalColumns];
+        mOpenArray = new boolean[totalRows][totalColumns];
+        mBombNumberArray = new int[totalRows][totalColumns];
+        mCellArray = new CellImageView[totalRows][totalColumns];
+    }
+
+    private void initGlView() {
+        mGlMinesweeper.setColumnCount(mTotalColumns);
+        mGlMinesweeper.setRowCount(mTotalRows);
+        for (int i = 0; i < mGlMinesweeper.getRowCount(); i++) {
+            for (int j = 0; j < mGlMinesweeper.getColumnCount(); j++) {
+                GridLayout.LayoutParams glParams = new GridLayout.LayoutParams(
+                        GridLayout.spec(i), GridLayout.spec(j));
+                glParams.width = mCellRealWidth;
+                glParams.height = mCellRealHeight;
+                CellImageView civ = new CellImageView(MainActivity.this, i, j, mCellRealWidth,
+                        mCellRealHeight);
+                civ.setLayoutParams(glParams);
+                civ.setOnClickListener(this);
+                civ.setOnLongClickListener(this);
+                civ.setOnTouchListener(this);
+                // 关闭系统按键发出的声音
+                civ.setHapticFeedbackEnabled(false);
+                mCellArray[i][j] = civ;
+                mGlMinesweeper.addView(civ);
+            }
+        }
+    }
+
+    private void setStatusBar() {
+        StatusBarUtils.toggleStatusBar(MainActivity.this, !mFullScreen);
+    }
+
+    private void initBombNumber() {
+        resetBombNumber();
+        showBombNumberView();
+        resetBombArray();
+    }
+
+    private void resetBombNumber() {
+        if (mDifficulty == Constant.DIFFICULT_EASY) {
+            mExistBombNumber = (int) Math.floor(mTotalCells * Constant.DIFFICULT_LEVEL[0]);
+        } else if (mDifficulty == Constant.DIFFICULT_MEDIUM) {
+            mExistBombNumber = (int) Math.floor(mTotalCells * Constant.DIFFICULT_LEVEL[1]);
+        } else {
+            mExistBombNumber = (int) Math.floor(mTotalCells * Constant.DIFFICULT_LEVEL[2]);
+        }
+        mRealBombNumber = mExistBombNumber;
+    }
+
+    private void showBombNumberView() {
+        int hundredBomb = mExistBombNumber / 100;
+        int tenBomb = (mExistBombNumber - hundredBomb * 100) / 10;
+        int bitBomb = mExistBombNumber % 10;
+
+        mIvBombHundred.setImageDrawable(DrawableManager.getInstance()
+                .getDrawable(DrawableManager.getInstance().getTimeNumberResourceId(hundredBomb)));
+        mIvBombTen.setImageDrawable(DrawableManager.getInstance()
+                .getDrawable(DrawableManager.getInstance().getTimeNumberResourceId(tenBomb)));
+        mIvBombBit.setImageDrawable(DrawableManager.getInstance()
+                .getDrawable(DrawableManager.getInstance().getTimeNumberResourceId(bitBomb)));
+    }
+
+    private void resetBombArray() {
+        Random random = new Random();
+        int i = 0;
+        while (i < mRealBombNumber) {
+            // 随机生成安放炸弹的坐标位置
+            int row = random.nextInt(mTotalRows);
+            int column = random.nextInt(mTotalColumns);
+            // 如果还没有安放炸弹，此处可以安放
+            if (!mBombArray[row][column]) {
+                i++;
+                mBombArray[row][column] = true;
+                // 炸弹的位置设为 BOMB_AREA_NUMBER，标识此处为炸弹，不需要计数
+                mBombNumberArray[row][column] = Constant.BOMB_AREA_NUMBER;
+                // 周围8个相邻地方格子
+                increaseBombNumber(row - 1, column - 1);
+                increaseBombNumber(row - 1, column);
+                increaseBombNumber(row - 1, column + 1);
+                increaseBombNumber(row, column + 1);
+                increaseBombNumber(row + 1, column + 1);
+                increaseBombNumber(row + 1, column);
+                increaseBombNumber(row + 1, column - 1);
+                increaseBombNumber(row, column - 1);
+            }
+        }
+    }
+
+    private void increaseBombNumber(int currentRow, int currentColumn) {
+        if (currentRow > -1 && currentRow < mTotalRows && currentColumn > -1
+                && currentColumn < mTotalColumns) {
+            if (mBombNumberArray[currentRow][currentColumn] != Constant.BOMB_AREA_NUMBER) {
+                mBombNumberArray[currentRow][currentColumn]++;
+            }
+        }
+    }
+
+    private void startPlayedTimer() {
+        if (!mStarted) {
+            mStarted = true;
+            openPlayedTimer();
+        }
+    }
+
+    private void openPlayedTimer() {
+        mTimer = new Timer();
+        mTimerTask = new TimerTask() {
+            @Override
+            public void run() {
+                mPlayedTimeHandler.sendEmptyMessage(1);
+            }
+        };
+        mTimer.schedule(mTimerTask, 0, 1000);
+    }
+
+    private void closePlayedTimer() {
+        if (mTimer != null || mTimerTask != null) {
+            mTimer.cancel();
+            mTimerTask.cancel();
+        }
+    }
+
+    private void resetPlayedTime() {
+        if (mPlayedTime != 0) {
+            mPlayedTime = 0;
+            setPlayedTime();
+        }
+    }
+
 }

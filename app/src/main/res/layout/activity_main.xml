@@ -13,8 +13,7 @@
             android:id="@+id/iv_play"
             android:layout_width="@dimen/top_item_width"
             android:layout_height="@dimen/top_item_height"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/iv_smile"/>
+            android:layout_centerHorizontal="true"/>
 
         <RelativeLayout
             android:id="@+id/rl_bomb"
@@ -29,22 +28,19 @@
                 android:id="@+id/iv_bomb_hundred"
                 android:layout_width="@dimen/top_time_width"
                 android:layout_height="@dimen/top_time_height"
-                android:layout_alignParentLeft="true"
-                android:src="@mipmap/iv_c0"/>
+                android:layout_alignParentLeft="true"/>
 
             <ImageView
                 android:id="@+id/iv_bomb_ten"
                 android:layout_width="@dimen/top_time_width"
                 android:layout_height="@dimen/top_time_height"
-                android:layout_toRightOf="@id/iv_bomb_hundred"
-                android:src="@mipmap/iv_c0"/>
+                android:layout_toRightOf="@id/iv_bomb_hundred"/>
 
             <ImageView
                 android:id="@+id/iv_bomb_bit"
                 android:layout_width="@dimen/top_time_width"
                 android:layout_height="@dimen/top_time_height"
-                android:layout_toRightOf="@id/iv_bomb_ten"
-                android:src="@mipmap/iv_c0"/>
+                android:layout_toRightOf="@id/iv_bomb_ten"/>
         </RelativeLayout>
 
         <ImageView
@@ -68,15 +64,13 @@
                 android:id="@+id/iv_time_bit"
                 android:layout_width="@dimen/top_time_width"
                 android:layout_height="@dimen/top_time_height"
-                android:layout_alignParentRight="true"
-                android:src="@mipmap/iv_c0"/>
+                android:layout_alignParentRight="true"/>
 
             <ImageView
                 android:id="@+id/iv_time_ten"
                 android:layout_width="@dimen/top_time_width"
                 android:layout_height="@dimen/top_time_height"
-                android:layout_toLeftOf="@id/iv_time_bit"
-                android:src="@mipmap/iv_c0"/>
+                android:layout_toLeftOf="@id/iv_time_bit"/>
 
             <ImageView
                 android:id="@+id/iv_time_czz"
@@ -89,19 +83,17 @@
                 android:id="@+id/iv_time_hundred"
                 android:layout_width="@dimen/top_time_width"
                 android:layout_height="@dimen/top_time_height"
-                android:layout_toLeftOf="@id/iv_time_czz"
-                android:src="@mipmap/iv_c0"/>
+                android:layout_toLeftOf="@id/iv_time_czz"/>
 
             <ImageView
                 android:id="@+id/iv_time_kilobit"
                 android:layout_width="@dimen/top_time_width"
                 android:layout_height="@dimen/top_time_height"
-                android:layout_toLeftOf="@id/iv_time_hundred"
-                android:src="@mipmap/iv_c0"/>
+                android:layout_toLeftOf="@id/iv_time_hundred"/>
         </RelativeLayout>
 
         <ImageView
-            android:id="@+id/iv_flag_mine"
+            android:id="@+id/iv_flag_bomb"
             android:layout_width="@dimen/top_item_width"
             android:layout_height="@dimen/top_item_height"
             android:layout_marginRight="16dp"
