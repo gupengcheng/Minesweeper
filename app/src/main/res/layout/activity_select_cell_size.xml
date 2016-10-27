@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/rgb_303030">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
+        android:text="@string/select_cell_size"
+        android:textColor="@color/rgb_c1c1c1"
+        android:textSize="22sp"/>
+
+    <SeekBar
+        android:id="@+id/sb_select_size"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title"
+        android:layout_marginTop="16dp"
+        android:max="100"
+        android:maxHeight="2dp"
+        android:minHeight="2dp"
+        android:paddingBottom="3dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="3dp"
+        android:progress="30"
+        android:progressDrawable="@drawable/seekbar_bg"
+        android:thumb="@drawable/seek_circle_shape"
+        android:thumbOffset="8dp"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_cell"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/cell_1"
+            android:layout_width="@dimen/cell_item_default_size"
+            android:layout_height="@dimen/cell_item_default_size"
+            android:background="@mipmap/iv_button"/>
+
+        <ImageView
+            android:id="@+id/cell_2"
+            android:layout_width="@dimen/cell_item_default_size"
+            android:layout_height="@dimen/cell_item_default_size"
+            android:layout_toRightOf="@id/cell_1"
+            android:background="@mipmap/iv_button"/>
+
+        <ImageView
+            android:id="@+id/cell_3"
+            android:layout_width="@dimen/cell_item_default_size"
+            android:layout_height="@dimen/cell_item_default_size"
+            android:layout_toRightOf="@id/cell_2"
+            android:background="@mipmap/iv_button"/>
+
+        <ImageView
+            android:id="@+id/cell_4"
+            android:layout_width="@dimen/cell_item_default_size"
+            android:layout_height="@dimen/cell_item_default_size"
+            android:layout_below="@id/cell_1"
+            android:background="@mipmap/iv_button"/>
+
+        <ImageView
+            android:id="@+id/cell_5"
+            android:layout_width="@dimen/cell_item_default_size"
+            android:layout_height="@dimen/cell_item_default_size"
+            android:layout_below="@id/cell_1"
+            android:layout_toRightOf="@id/cell_4"
+            android:background="@mipmap/iv_button"/>
+
+        <ImageView
+            android:id="@+id/cell_6"
+            android:layout_width="@dimen/cell_item_default_size"
+            android:layout_height="@dimen/cell_item_default_size"
+            android:layout_below="@id/cell_1"
+            android:layout_toRightOf="@id/cell_5"
+            android:background="@mipmap/iv_button"/>
+
+        <ImageView
+            android:id="@+id/cell_7"
+            android:layout_width="@dimen/cell_item_default_size"
+            android:layout_height="@dimen/cell_item_default_size"
+            android:layout_below="@id/cell_4"
+            android:background="@mipmap/iv_button"/>
+
+        <ImageView
+            android:id="@+id/cell_8"
+            android:layout_width="@dimen/cell_item_default_size"
+            android:layout_height="@dimen/cell_item_default_size"
+            android:layout_below="@id/cell_4"
+            android:layout_toRightOf="@id/cell_7"
+            android:background="@mipmap/iv_button"/>
+
+        <ImageView
+            android:id="@+id/cell_9"
+            android:layout_width="@dimen/cell_item_default_size"
+            android:layout_height="@dimen/cell_item_default_size"
+            android:layout_below="@id/cell_4"
+            android:layout_toRightOf="@id/cell_8"
+            android:background="@mipmap/iv_button"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_save"
+        android:layout_width="120dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:text="@string/save"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:background="@drawable/btn_save_selector"/>
+
+</RelativeLayout>

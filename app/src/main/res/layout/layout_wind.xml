@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="@string/win_congratulation"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/tv_new_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="@string/win_new_record"
+        android:textColor="@android:color/holo_orange_dark"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_your_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/rgb_212121"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tv_best_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/rgb_212121"
+        android:textSize="16sp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/btn_done"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/holo_green_dark"
+            android:gravity="center"
+            android:text="@string/win_done"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+
+        <Button
+            android:id="@+id/btn_new_game"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/holo_blue_dark"
+            android:gravity="center"
+            android:text="@string/win_new_game"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_share"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@android:color/holo_orange_dark"
+        android:gravity="center"
+        android:text="@string/share"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"/>
+
+</LinearLayout>

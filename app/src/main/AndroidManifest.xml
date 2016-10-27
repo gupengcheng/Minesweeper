@@ -1,6 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.gpc.minesweeper">
 
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!--umeng analytics begin-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <!--umeng analytics end-->
+
     <application
         android:name=".MinesweeperApplication"
         android:allowBackup="true"
@@ -8,12 +16,26 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <activity
+            android:name=".ui.MainActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.SettingActivity"
+            android:label="@string/settings"
+            android:theme="@style/SettingTheme"/>
+
+        <activity
+            android:name=".ui.CellSizeActivity"
+            android:label="@string/select_cell_size"
+            android:theme="@style/SettingTheme"/>
     </application>
 
 </manifest>

@@ -74,6 +74,8 @@ public class DrawableManager {
 
     public int getCellNumberResourceId(int number) {
         switch (number) {
+            case 0:
+                return R.mipmap.iv_empty;
             case 1:
                 return R.mipmap.iv_n1;
             case 2:
@@ -93,7 +95,7 @@ public class DrawableManager {
             case 9:
                 return R.mipmap.iv_n9;
             default:
-                return R.mipmap.iv_n1;
+                return R.mipmap.iv_empty;
         }
     }
 

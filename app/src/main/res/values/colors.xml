@@ -3,4 +3,15 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="rgb_303030">#303030</color>
+    <color name="rgb_c1c1c1">#c1c1c1</color>
+    <color name="rgb_80cbc4">#80cbc4</color>
+    <color name="setting_divider">#424242</color>
+    <color name="rgb_212121">#212121</color>
+    <color name="seek_left">#80cbc4</color>
+    <color name="seek_right">#5c5c5c</color>
+    <color name="rgb_238989">#238989</color>
+    <color name="rgb_2a9090">#2a9090</color>
+    <color name="rgb_cd2184">#cd2184</color>
 </resources>

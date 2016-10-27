@@ -4,4 +4,10 @@
     <dimen name="top_item_height">36dp</dimen>
     <dimen name="top_time_width">20dp</dimen>
     <dimen name="top_time_height">36dp</dimen>
+
+    <dimen name="setting_item_height">56dp</dimen>
+    <dimen name="large_text">18sp</dimen>
+    <dimen name="small_text">14sp</dimen>
+    <dimen name="divider_height">0.5dp</dimen>
+    <dimen name="cell_item_default_size">30dp</dimen>
 </resources>

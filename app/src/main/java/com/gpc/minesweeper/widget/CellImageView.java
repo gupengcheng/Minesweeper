@@ -26,7 +26,7 @@ public class CellImageView extends ImageView {
         this.setCellRow(cellRow);
         this.setCellColumn(cellColumn);
         this.setScaleType(ScaleType.FIT_XY);
-        this.setImageDrawable(R.mipmap.iv_empty);
+        this.setImageDrawable(R.mipmap.iv_button);
         this.setMinimumWidth(cellWidth);
         this.setMaxWidth(cellWidth);
         this.setMinimumHeight(cellHeight);

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/rgb_303030"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_setting"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/rgb_212121"
+        android:elevation="3dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/settings"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:textStyle="normal"/>
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rl_vibration"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_vibration_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_vibration"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/large_text"/>
+
+                <TextView
+                    android:id="@+id/tv_vibration_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_vibration_title"
+                    android:text="@string/setting_vibration_enabled"
+                    android:textColor="@color/rgb_c1c1c1"
+                    android:textSize="@dimen/small_text"/>
+
+                <CheckBox
+                    android:id="@+id/cb_vibration"
+                    style="@style/Base.Widget.AppCompat.CompoundButton.CheckBox"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:checked="true"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/setting_screen"
+                android:textColor="@color/rgb_80cbc4"
+                android:textSize="@dimen/small_text"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_full_screen"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_full_screen_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_full_screen_mode"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/large_text"/>
+
+                <TextView
+                    android:id="@+id/tv_full_screen_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_full_screen_title"
+                    android:text="@string/setting_full_screen_enabled"
+                    android:textColor="@color/rgb_c1c1c1"
+                    android:textSize="@dimen/small_text"/>
+
+                <CheckBox
+                    android:id="@+id/cb_full_screen"
+                    style="@style/Base.Widget.AppCompat.CompoundButton.CheckBox"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:checked="true"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:background="@color/setting_divider"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_size"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_size_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_size"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/large_text"/>
+
+                <TextView
+                    android:id="@+id/tv_size_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_size_title"
+                    android:text="@string/setting_size_desc"
+                    android:textColor="@color/rgb_c1c1c1"
+                    android:textSize="@dimen/small_text"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_game"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/setting_game"
+                android:textColor="@color/rgb_80cbc4"
+                android:textSize="@dimen/small_text"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_difficult"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_difficult_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_difficult"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/large_text"/>
+
+                <TextView
+                    android:id="@+id/tv_difficult_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_difficult_title"
+                    android:text="@string/setting_difficult_easy"
+                    android:textColor="@color/rgb_c1c1c1"
+                    android:textSize="@dimen/small_text"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_mute"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tv_mute_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_mute_title"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/large_text"/>
+
+                <TextView
+                    android:id="@+id/tv_mute_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_mute_title"
+                    android:textColor="@color/rgb_c1c1c1"
+                    android:textSize="@dimen/small_text"/>
+
+                <CheckBox
+                    android:id="@+id/cb_mute"
+                    style="@style/Base.Widget.AppCompat.CompoundButton.CheckBox"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_tell_friend"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tell_friend"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/large_text"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_rate_us"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_item_height"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rate_us"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/large_text"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

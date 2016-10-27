@@ -1,3 +1,37 @@
 <resources>
     <string name="app_name">Minesweeper</string>
+    <string name="settings">Settings</string>
+    <string name="setting_vibration">Vibration</string>
+    <string name="setting_vibration_enabled">vibration is enabled</string>
+    <string name="setting_vibration_disabled">vibration is disabled</string>
+    <string name="setting_screen">Screen</string>
+    <string name="setting_full_screen_mode">Fullscreen mode</string>
+    <string name="setting_full_screen_enabled">Fullscreen mode.(Status bar is disabled)</string>
+    <string name="setting_full_screen_disabled">Status bar is enabled</string>
+    <string name="setting_size">Size</string>
+    <string name="setting_size_desc">Select the size of the cell.</string>
+    <string name="setting_game">Game</string>
+    <string name="setting_difficult">Difficult</string>
+    <string name="setting_difficult_easy">Easy</string>
+    <string name="setting_difficult_medium">Medium</string>
+    <string name="setting_difficult_hard">Hard</string>
+    <string name="setting_mute_title">Mute</string>
+    <string name="setting_mute_enabled">Mute is enabled</string>
+    <string name="setting_mute_disabled">Mute is disabled</string>
+    <string name="select_cell_size">Select the size of the cell.</string>
+    <string name="win_congratulation">Congratulation! </string>
+    <string name="win_best_time">Best time: </string>
+    <string name="win_you_time">Your time: </string>
+    <string name="win_new_record">New Record</string>
+    <string name="win_done">Done</string>
+    <string name="win_new_game">New Game</string>
+    <string name="save">SAVE</string>
+    <string name="rate_us">Rate us</string>
+    <string name="no_thanks">No thanks</string>
+    <string name="share">Share</string>
+    <string name="tell_friend">Tell friends</string>
+    <string name="tell_friend_content">I was found a very classic game Minesweeper for Android, it\'s free. Get it at https://play.google.com/store/apps/details?id=minesweeper.button.suitable.</string>
+    <string name="share_normal">I was use %1$s sec to clean the mines in Minesweeper classic. Download Minesweeper for Android! Get it at https://play.google.com/store/apps/details?id=minesweeper.button.suitable. It\'s free!</string>
+    <string name="share_new_record">I was make a new record in Minesweeper classic with %1$s seconds. Download Minesweeper for Android! Get it at https://play.google.com/store/apps/details?id=minesweeper.button.suitable. It\'s free.</string>
+
 </resources>

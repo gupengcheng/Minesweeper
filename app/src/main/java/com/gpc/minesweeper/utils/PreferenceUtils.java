@@ -429,20 +429,4 @@ public class PreferenceUtils {
         settings.edit().putBoolean("rate_us", rateUs).commit();
     }
 
-    /**
-     * 当前应用生命周期内用户玩游戏的次数
-     * 
-     * @param context
-     * @return
-     */
-    public static int getPlayGameTimes(Context context) {
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        return settings.getInt("play_game_times", 0);
-    }
-
-    public static void setPlayGameTimes(Context context, int playGameTimes) {
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        settings.edit().putInt("play_game_times", playGameTimes).commit();
-    }
-
 }
