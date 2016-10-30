@@ -280,9 +280,9 @@ public class MainActivity extends Activity implements View.OnClickListener,
 
     @OnClick(R.id.iv_flag_bomb)
     void flagBomb() {
+        mMarked = !mMarked;
         mIvFlagBomb.setImageResource(
                 mMarked ? R.mipmap.iv_switch_flag : R.mipmap.iv_switch_bomb);
-        mMarked = !mMarked;
     }
 
     private void setFullScreenMode() {
