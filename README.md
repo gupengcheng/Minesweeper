@@ -1,4 +1,3 @@
-![](http://upload-images.jianshu.io/upload_images/1761049-17fe1838f38bee56.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300)
 
 对于很多没有接触过游戏开发的同学来说，开发一款游戏似乎无从下手，总想到可能要学这个框架那个引擎，但是却忽略了其实用Android原生的控件也能开发一款有趣的小游戏，本篇文章就给大家详细介绍如何使用原生控件做出一款Google play上下载量达百万级的游戏——Minesweeper（扫雷）。
 
